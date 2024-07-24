@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genotyping Results</title>
+</head>
+<body>
+    <h1>Genotyping Results</h1>
+    {% for result in results %}
+        <h2>File: {{ result.filename }}</h2>
+        <img src="{{ url_for('get_image', index=loop.index0) }}" alt="Genotyping result">
+        <!-- Add more result details as needed -->
+    {% endfor %}
+    <a href="{{ url_for('index') }}">Back to Upload</a>
+</body>
+</html>
