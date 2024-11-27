@@ -4,4 +4,4 @@
 # ignore raw Sanger sequencing data
 F38_otof-Rprimer*
 
-
+__pycache__/sanger_analysis.cpython-310.pyc

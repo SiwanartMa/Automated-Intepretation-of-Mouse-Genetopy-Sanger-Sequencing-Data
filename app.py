@@ -1,36 +1,66 @@
-from flask import Flask, render_template, request, send_file
-from sanger_analysis import multiple_pysanger_plot
-import io
 import os
-
-print("Current working directory:", os.getcwd())
-
-# Add this line to print out the absolute path of the templates folder
-print("Templates folder:", os.path.abspath(os.path.join(os.getcwd(), 'templates')))
+import base64
+import logging
+from flask import Flask, request, render_template, redirect, url_for
+from sanger_analysis import visualize_sanger_sequence, multiple_pysanger_plot
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    print("Attempting to render index.html")
-    if request.method == 'POST':
-        files = request.files.getlist('files')
-        print("POST request received")
-        template = request.form['template']
-        highlight_positions = [int(pos) for pos in request.form['highlight_positions'].split(',')]
-        results = multiple_pysanger_plot(files, template, highlight_positions)
-        app.config['RESULTS'] = results  # Store results in app config
-        print(f"Number of results: {len(results)}")
-        return render_template('results.html', results=results)
-    print("Rendering index.html")
+logging.basicConfig(level=logging.DEBUG)
+
+@app.route('/')
+def home():
     return render_template('index.html')
 
-@app.route('/image/<int:index>')
-def get_image(index):
-    results = app.config['RESULTS']
-    img_buffer = results[index]['image']
-    img_buffer.seek(0)
-    return send_file(img_buffer, mimetype='image/png')
+@app.route('/single', methods=['GET', 'POST'])
+def single():
+    if request.method == 'POST':
+        uploaded_file = request.files.get('file')
+        if uploaded_file:
+            template = request.form.get("template")
+            highlight_positions = request.form.get("highlight_positions")
+
+            # Ensure highlight_positions is a list of strings or integers
+            highlight_positions = highlight_positions.split(',') if highlight_positions else []
+            highlight_positions = [int(pos) for pos in highlight_positions if pos.isdigit()]
+
+            img_buffer, f_seq, r_seq, file_name = visualize_sanger_sequence(uploaded_file, template, highlight_positions)
+            img_base64 = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+
+            result = {
+                'image': img_base64,
+                'f_seq': f_seq,
+                'r_seq': r_seq,
+                'filename' : file_name
+            }
+            
+            return render_template('single_result.html', result=result)
+    
+    return render_template('single.html')
+
+@app.route('/multiple', methods=['GET', 'POST'])
+def multiple():
+    if request.method == 'POST':
+        uploaded_files = request.files.getlist('directory')
+        template = request.form.get("template")
+        
+        # Ensure highlight_positions is a list of strings or integers
+        highlight_positions = request.form.get("highlight_positions")
+        highlight_positions = highlight_positions.split(',') if highlight_positions else []
+        highlight_positions = [int(pos) for pos in highlight_positions if pos.isdigit()]
+
+        if uploaded_files:
+            files = [file for file in uploaded_files if file.filename.endswith('.ab1')]
+
+            results = multiple_pysanger_plot(files, template, highlight_positions)
+            
+            for result in results:
+                result['image'] = base64.b64encode(result['image'].getvalue()).decode('utf-8')
+            
+            return render_template('multiple_results.html', results=results)
+    
+    return render_template('multiple.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
