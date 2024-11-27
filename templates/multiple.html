@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualize Multiple ABI Files</title>
+</head>
+<body>
+    <h1>Visualize Multiple ABI Files</h1>
+    <form action="{{ url_for('multiple') }}" method="post" enctype="multipart/form-data">
+        <label for="directory">Select Directory:</label>
+        <input type="file" name="directory" id="directory" webkitdirectory directory multiple required>
+        <br>
+        <label for="template">Template:</label>
+        <input type="text" name="template" id="template">
+        <br>
+        <label for="highlight_positions">Highlight Positions:</label>
+        <input type="text" name="highlight_positions" id="highlight_positions">
+        <br>
+        <button type="submit">Visualize</button>
+    </form>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

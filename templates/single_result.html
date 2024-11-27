@@ -1,0 +1,17 @@
+<!-- single_result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Single ABI File Result</title>
+</head>
+<body>
+    <h1>Visualization Result</h1>
+    <img src="data:image/png;base64,{{ result.image }}" alt="Sanger Sequence Visualization"><br>
+    <h2>Forward Sequence:</h2>
+    <pre>{{ result.f_seq }}</pre>
+    <h2>Reverse Sequence:</h2>
+    <pre>{{ result.r_seq }}</pre>
+    <a href="/single">Upload Another File</a>
+</body>
+</html>

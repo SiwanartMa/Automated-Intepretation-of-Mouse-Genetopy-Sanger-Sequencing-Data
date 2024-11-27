@@ -1,0 +1,7 @@
+# ignore all output figures
+*.png
+
+# ignore raw Sanger sequencing data
+F38_otof-Rprimer*
+
+

@@ -1,0 +1,24 @@
+<!-- single.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualize Single ABI File</title>
+</head>
+<body>
+    <h1>Visualize Single ABI File</h1>
+    <form action="{{ url_for('single') }}" method="post" enctype="multipart/form-data">
+        <label for="file">Upload ABI file:</label>
+        <input type="file" name="file" id="file" required>
+        <br>
+        <label for="template">Template:</label>
+        <input type="text" name="template" id="template">
+        <br>
+        <label for="highlight_positions">Highlight Positions:</label>
+        <input type="text" name="highlight_positions" id="highlight_positions">
+        <br>
+        <button type="submit">Visualize</button>
+    </form>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

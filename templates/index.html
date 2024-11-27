@@ -1,21 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Sanger Sequencing Analysis</title>
+    <meta charset = "UTF-8">
+    <title>Genotyping Tool</title>
 </head>
 <body>
-    <h1>Sanger Sequencing Analysis</h1>
-    <form method="post" enctype="multipart/form-data">
-        <label for="files">Select AB1 files:</label>
-        <input type="file" name="files" accept=".ab1" multiple required><br><br>
-        
-        <label for="template">Template:</label>
-        <input type="text" name="template" required><br><br>
-        
-        <label for="highlight_positions">Highlight Positions (comma-separated):</label>
-        <input type="text" name="highlight_positions" required><br><br>
-        
-        <input type="submit" value="Analyze">
-    </form>
+    <h1>Genotyping Tool</h1>
+    <ul>
+        <li><a href="{{ url_for('single') }}">Visualize Single ABI File</a></li>
+        <li><a href="{{ url_for('multiple') }}">Visualize Multiple ABI Files</a></li>
+    </ul>
 </body>
 </html>
